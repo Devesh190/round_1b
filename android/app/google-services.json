@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "940732082733",
+    "project_id": "round1b",
+    "storage_bucket": "round1b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:940732082733:android:6e52bbdcba290cd51de6a4",
+        "android_client_info": {
+          "package_name": "com.example.round_1b"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJl1ogM5PPaHq4ZNhei0NA115UVShgNTU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
