@@ -69,6 +69,7 @@ class AuthProvider with ChangeNotifier {
     AuthService service = AuthService();
     bool status = await service.login(email!, password!, context);
     if (status) {
+      
       Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const CommentsScreen()));
     }
