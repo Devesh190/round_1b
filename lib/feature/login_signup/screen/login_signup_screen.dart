@@ -15,12 +15,19 @@ class LoginSignUpScreen extends StatefulWidget {
 }
 
 class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
+  
+
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.blue.shade50,
-        appBar:  CommonAppBar(title: 'Comments',titleStyle: TextStyle(color: Colors.blue.shade800, fontWeight: FontWeight.w700), showIcon: false,color: Colors.blue.shade50),
+        appBar: CommonAppBar(
+            title: 'Comments',
+            titleStyle: TextStyle(
+                color: Colors.blue.shade800, fontWeight: FontWeight.w700),
+            showIcon: false,
+            color: Colors.blue.shade50),
         body: Consumer<AuthProvider>(builder: (context, authProvider, child) {
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 50),
