@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:round_1b/feature/login_signup/service/auth_service.dart';
 
 import '../../comments/screen/comments_screen.dart';
+import '../screen/login_signup_screen.dart';
 
 class AuthProvider with ChangeNotifier {
   bool isLogin = false;
@@ -59,7 +60,7 @@ class AuthProvider with ChangeNotifier {
     AuthService service = AuthService();
     bool status = await service.signUp(name!, email!, password!, context);
     if (status) {
-      Navigator.of(context).push(
+      Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => const CommentsScreen()));
     }
     return status;
@@ -69,9 +70,18 @@ class AuthProvider with ChangeNotifier {
     AuthService service = AuthService();
     bool status = await service.login(email!, password!, context);
     if (status) {
-      Navigator.of(context).push(
+      Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => const CommentsScreen()));
     }
     return status;
+  }
+
+  void logout(BuildContext context) {
+    AuthService service = AuthService();
+    service.logout(context);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginSignUpScreen()),
+    );
   }
 }

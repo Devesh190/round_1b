@@ -19,16 +19,18 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const CommonAppBar(title: 'Comments'),
+        backgroundColor: Colors.blue.shade50,
+        appBar:  CommonAppBar(title: 'Comments',titleStyle: TextStyle(color: Colors.blue.shade800, fontWeight: FontWeight.w700), showIcon: false,color: Colors.blue.shade50),
         body: Consumer<AuthProvider>(builder: (context, authProvider, child) {
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 50),
-            color: Colors.blue.shade50,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  height: Utils.deviceHeight * 0.25,
+                  height: authProvider.getIsLogin()
+                      ? Utils.deviceHeight * 0.2
+                      : Utils.deviceHeight * 0.25,
                   child: Form(
                     key: _formKey,
                     child: Column(

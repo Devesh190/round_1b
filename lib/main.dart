@@ -4,11 +4,14 @@ import 'package:provider/provider.dart';
 import 'package:round_1b/feature/login_signup/provider/auth_provider.dart';
 import 'package:round_1b/feature/login_signup/screen/login_signup_screen.dart';
 
+import 'feature/comments/provider/comments_provider.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => AuthProvider()),
+    ChangeNotifierProvider(create: (_) => CommentsProvider()),
   ], child: const MyApp()));
 }
 
