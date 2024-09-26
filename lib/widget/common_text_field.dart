@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../feature/login_signup/provider/auth_provider.dart';
 
 class CommonTextField extends StatefulWidget {
   const CommonTextField(
@@ -8,7 +11,7 @@ class CommonTextField extends StatefulWidget {
       this.size = 44,
       this.setFunction,
       required this.validateFunction,
-      this.visibility = false,
+      this.visibility = false, // True if it is a password field
       this.textFieldColor = Colors.white,
       this.readOnly = false});
   final String hintText;
@@ -25,13 +28,17 @@ class CommonTextField extends StatefulWidget {
 }
 
 class _CommonTextFieldState extends State<CommonTextField> {
-  final TextEditingController _controller = TextEditingController();
+  TextEditingController _controller = TextEditingController();
+  bool _obscureText = true;
 
   @override
   void initState() {
     super.initState();
-    widget.value.isNotEmpty ? _controller.text = widget.value : null;
+    _controller = TextEditingController(text: widget.value);
     _controller.addListener(updateValue);
+    if (!widget.visibility) {
+      _obscureText = false;
+    }
   }
 
   void updateValue() {
@@ -49,43 +56,57 @@ class _CommonTextFieldState extends State<CommonTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints:
-          const BoxConstraints(maxHeight: 80), // Limits height of TextFormField
-      child: TextFormField(
-        cursorColor: Colors.black,
-        controller: _controller,
-        readOnly: widget.readOnly,
-        obscureText: widget.visibility,
-        decoration: InputDecoration(
-          fillColor: Colors.white,
-          hintText: widget.hintText,
-          filled: true,
-          isCollapsed: true,
-          contentPadding: const EdgeInsets.all(10),
-          errorMaxLines: 1,
-          errorStyle: const TextStyle(
-            fontSize: 10,
-            height: 0.8,
+    return Consumer<AuthProvider>(builder: (context, authProvider, child) {
+      return ConstrainedBox(
+        constraints: const BoxConstraints(maxHeight: 80),
+        child: TextFormField(
+          cursorColor: Colors.black,
+          controller: _controller,
+          readOnly: widget.readOnly,
+          obscureText: _obscureText,
+          decoration: InputDecoration(
+            fillColor: Colors.white,
+            hintText: widget.hintText,
+            filled: true,
+            isCollapsed: true,
+            contentPadding: const EdgeInsets.all(10),
+            errorMaxLines: 1,
+            errorStyle: const TextStyle(
+              fontSize: 10,
+              height: 0.8,
+            ),
+            suffixIcon: widget.visibility
+                ? IconButton(
+                    icon: Icon(
+                      _obscureText ? Icons.visibility_off : Icons.visibility,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                  )
+                : null, // Only show the icon for password fields
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            border: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide.none,
+            ),
+            labelStyle: const TextStyle(color: Colors.black),
           ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide.none,
-          ),
-          labelStyle: const TextStyle(color: Colors.black),
+          validator: (value) {
+            return widget.validateFunction(value);
+          },
         ),
-        validator: (value) {
-          return widget.validateFunction(value);
-        },
-      ),
-    );
+      );
+    });
   }
 }

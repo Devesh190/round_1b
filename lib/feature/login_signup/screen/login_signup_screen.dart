@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:round_1b/widget/common_appbar.dart';
 import 'package:round_1b/widget/common_text_field.dart';
@@ -38,12 +39,48 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                   child: Form(
                     key: _formKey,
                     child: Column(
-                      mainAxisAlignment: authProvider.getIsLogin()
-                          ? MainAxisAlignment.spaceEvenly
-                          : MainAxisAlignment.spaceEvenly,
-                      children:
-                          _getListFormField(authProvider.getIsLogin(), context),
-                    ),
+                        mainAxisAlignment: authProvider.getIsLogin()
+                            ? MainAxisAlignment.spaceEvenly
+                            : MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Visibility(
+                            visible: !authProvider.getIsLogin(),
+                            child: CommonTextField(
+                                hintText: "Name",
+                                setFunction: authProvider.setName,
+                             
+                                validateFunction: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your name';
+                                  }
+                                }),
+                          ),
+                          CommonTextField(
+                              hintText: "Email",
+                              setFunction: authProvider.setEmail,
+                            
+                              validateFunction: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your email';
+                                } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                                    .hasMatch(value)) {
+                                  return 'Please enter a valid email';
+                                }
+                                return null;
+                              }),
+                          CommonTextField(
+                              hintText: "Password",
+                              setFunction: authProvider.setPassword,
+                              visibility: true,
+                              validateFunction: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your password';
+                                } else if (value.length < 6) {
+                                  return 'Password must be at least 6 characters long';
+                                }
+                                return null;
+                              }),
+                        ]),
                   ),
                 ),
                 const Expanded(flex: 6, child: SizedBox.shrink()),
@@ -119,69 +156,5 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
             ),
           );
         }));
-  }
-}
-
-List<Widget> _getListFormField(bool value, BuildContext context) {
-  final provider = Provider.of<AuthProvider>(context, listen: false);
-
-  if (!value) {
-    return [
-      CommonTextField(
-          hintText: "Name",
-          setFunction: provider.setName,
-          validateFunction: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter your name';
-            }
-          }),
-      CommonTextField(
-          hintText: "Email",
-          setFunction: provider.setEmail,
-          validateFunction: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter your email';
-            } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-              return 'Please enter a valid email';
-            }
-            return null;
-          }),
-      CommonTextField(
-          hintText: "Password",
-          setFunction: provider.setPassword,
-          validateFunction: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter your password';
-            } else if (value.length < 6) {
-              return 'Password must be at least 6 characters long';
-            }
-            return null;
-          }),
-    ];
-  } else {
-    return [
-      CommonTextField(
-          hintText: "Email",
-          setFunction: provider.setEmail,
-          validateFunction: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter your email';
-            } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-              return 'Please enter a valid email';
-            }
-            return null;
-          }),
-      CommonTextField(
-          hintText: "Password",
-          setFunction: provider.setPassword,
-          validateFunction: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter your password';
-            } else if (value.length < 6) {
-              return 'Password must be at least 6 characters long';
-            }
-            return null;
-          }),
-    ];
   }
 }

@@ -39,7 +39,7 @@ class _UserCardState extends State<UserCard> {
 
   @override
   Widget build(BuildContext context) {
-    final maskedEmail = _maskEmail(widget.email); 
+    final maskedEmail = _maskEmail(widget.email);
 
     return Card.filled(
       margin: const EdgeInsets.all(10),
@@ -58,7 +58,7 @@ class _UserCardState extends State<UserCard> {
               backgroundColor: Colors.grey.shade200,
               radius: 25.0,
               child: Text(
-                maskedEmail[0], 
+                widget.name [0],
                 style: const TextStyle(fontSize: 20.0, color: Colors.black),
               ),
             ),
@@ -102,7 +102,7 @@ class _UserCardState extends State<UserCard> {
                       ),
                       Expanded(
                         child: Text(
-                          maskedEmail, 
+                          maskedEmail,
                           style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
