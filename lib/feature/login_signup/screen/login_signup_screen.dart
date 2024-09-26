@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:round_1b/widget/common_appbar.dart';
 import 'package:round_1b/widget/common_text_field.dart';
-import 'package:round_1b/widget/utils.dart';
 
 import '../provider/auth_provider.dart';
 
@@ -15,13 +14,12 @@ class LoginSignUpScreen extends StatefulWidget {
 }
 
 class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
-  
-
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.blue.shade50,
+        resizeToAvoidBottomInset: false,
         appBar: CommonAppBar(
             title: 'Comments',
             titleStyle: TextStyle(
@@ -34,82 +32,88 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(
-                  height: authProvider.getIsLogin()
-                      ? Utils.deviceHeight * 0.2
-                      : Utils.deviceHeight * 0.25,
+                const Expanded(flex: 2, child: SizedBox.shrink()),
+                Expanded(
+                  flex: authProvider.getIsLogin() ? 3 : 4,
                   child: Form(
                     key: _formKey,
                     child: Column(
                       mainAxisAlignment: authProvider.getIsLogin()
-                          ? MainAxisAlignment.spaceAround
-                          : MainAxisAlignment.spaceBetween,
+                          ? MainAxisAlignment.spaceEvenly
+                          : MainAxisAlignment.spaceEvenly,
                       children:
                           _getListFormField(authProvider.getIsLogin(), context),
                     ),
                   ),
                 ),
-                Column(
-                  children: [
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue.shade800,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 80, vertical: 10)),
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            authProvider.statusChangeIsloading();
-                            _formKey.currentState!.save();
-                            if (authProvider.getIsLogin()) {
-                              await authProvider.login(context);
-                            } else {
-                              await authProvider.signUp(context);
-                            }
+                const Expanded(flex: 6, child: SizedBox.shrink()),
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: [
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue.shade800,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 80, vertical: 10)),
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              authProvider.statusChangeIsloading();
+                              _formKey.currentState!.save();
+                              if (authProvider.getIsLogin()) {
+                                await authProvider.login(context);
+                              } else {
+                                await authProvider.signUp(context);
+                              }
 
-                            authProvider.statusChangeIsloading();
-                          }
-                        },
-                        child: authProvider.getIsLoading()
-                            ? const SizedBox(
-                                height: 30,
-                                width: 30,
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : Text(
-                                authProvider.getIsLogin() ? 'Login' : "Signup",
-                                style: const TextStyle(fontSize: 20),
-                              )),
-                    const SizedBox(height: 10),
-                    RichText(
-                      text: TextSpan(
-                        text: authProvider.getIsLogin()
-                            ? 'New here? '
-                            : 'Already have an account? ',
-                        style: const TextStyle(
-                            color: Colors.black, fontSize: 18.0),
-                        children: <TextSpan>[
-                          TextSpan(
-                            text:
-                                authProvider.getIsLogin() ? 'SignUp' : 'Login',
-                            style: TextStyle(
-                              color: Colors.blue.shade800,
-                              fontWeight: FontWeight.bold,
+                              authProvider.statusChangeIsloading();
+                            }
+                          },
+                          child: authProvider.getIsLoading()
+                              ? const SizedBox(
+                                  height: 30,
+                                  width: 30,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Text(
+                                  authProvider.getIsLogin()
+                                      ? 'Login'
+                                      : "Signup",
+                                  style: const TextStyle(fontSize: 20),
+                                )),
+                      const SizedBox(height: 10),
+                      RichText(
+                        text: TextSpan(
+                          text: authProvider.getIsLogin()
+                              ? 'New here? '
+                              : 'Already have an account? ',
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 18.0),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: authProvider.getIsLogin()
+                                  ? 'SignUp'
+                                  : 'Login',
+                              style: TextStyle(
+                                color: Colors.blue.shade800,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  authProvider.changeIsLoginStatus();
+                                },
                             ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                authProvider.changeIsLoginStatus();
-                              },
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),

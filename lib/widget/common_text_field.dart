@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class CommonTextField extends StatefulWidget {
   const CommonTextField(
@@ -36,7 +35,9 @@ class _CommonTextFieldState extends State<CommonTextField> {
   }
 
   void updateValue() {
-    widget.setFunction!(_controller.text);
+    if (widget.setFunction != null) {
+      widget.setFunction!(_controller.text);
+    }
   }
 
   @override
@@ -48,21 +49,25 @@ class _CommonTextFieldState extends State<CommonTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      cursorColor: Colors.black,
-      // maxLines: widget.visibility ? 1 : 1,
-      controller: _controller,
-      readOnly: widget.readOnly,
-      obscureText: widget.visibility,
-      // expands: widget.visibility ? false : true,
-      decoration: InputDecoration(
+    return ConstrainedBox(
+      constraints:
+          const BoxConstraints(maxHeight: 80), // Limits height of TextFormField
+      child: TextFormField(
+        cursorColor: Colors.black,
+        controller: _controller,
+        readOnly: widget.readOnly,
+        obscureText: widget.visibility,
+        decoration: InputDecoration(
           fillColor: Colors.white,
           hintText: widget.hintText,
           filled: true,
           isCollapsed: true,
           contentPadding: const EdgeInsets.all(10),
           errorMaxLines: 1,
-          errorStyle: TextStyle(fontSize: 10),
+          errorStyle: const TextStyle(
+            fontSize: 10,
+            height: 0.8,
+          ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(10.0),
@@ -72,12 +77,15 @@ class _CommonTextFieldState extends State<CommonTextField> {
             borderRadius: BorderRadius.circular(10.0),
           ),
           focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide.none),
-          labelStyle: const TextStyle(color: Colors.black)),
-      validator: (value) {
-        return widget.validateFunction(value);
-      },
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: BorderSide.none,
+          ),
+          labelStyle: const TextStyle(color: Colors.black),
+        ),
+        validator: (value) {
+          return widget.validateFunction(value);
+        },
+      ),
     );
   }
 }

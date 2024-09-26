@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:round_1b/widget/custom_snackbar.dart';
@@ -12,6 +13,16 @@ class AuthService {
           .createUserWithEmailAndPassword(email: email, password: password);
 
       await userCredential.user?.updateDisplayName(name);
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user?.uid)
+          .set({
+        'name': name,
+        'email': email,
+        'createdAt': Timestamp.now(),
+      });
+
       customWidgets.showCustomSnackbar(
           true, "Registration Successful", context);
 
@@ -21,6 +32,10 @@ class AuthService {
       log(message);
       customWidgets.showCustomSnackbar(false, message, context);
 
+      return false;
+    } catch (e) {
+      log(e.toString());
+      customWidgets.showCustomSnackbar(false, "Something went wrong", context);
       return false;
     }
   }

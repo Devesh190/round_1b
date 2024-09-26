@@ -85,7 +85,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
 
   Widget buildShimmerLoading() {
     return ListView.builder(
-      itemCount: 10, // Number of shimmer cards
+      itemCount: 10,
       itemBuilder: (context, index) {
         return Shimmer.fromColors(
           baseColor: Colors.grey.shade300,
@@ -93,7 +93,8 @@ class _CommentsScreenState extends State<CommentsScreen> {
           child: const UserCard(
             name: 'Loading..',
             email: 'Loading...',
-            description: 'loading..',
+            description:
+                'quia molestiae reprehenderit quasi aspernatur\naut expedita occaecati aliquam eveniet laudantium\nomnis quibusdam delectus saepe quia accusamus maiores nam est\ncum et ducimus et vero voluptates excepturi deleniti ratione',
             maskEmail: false,
           ),
         );
